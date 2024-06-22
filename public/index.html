@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>猜猜我是進</h1>
+        <div class="join-section">
+          <input type="text" id="username" placeholder="輸入名字" />
+          <button id="joinButton">加入</button>
+        </div>
+        <div class="game-section">
+            <h2>玩家</h2>
+            <ul id="userList"></ul>
+            <button id="startGame">開新一局</button>
+        </div>
+    </div>
+</body>
+</html>
