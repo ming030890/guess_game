@@ -41,6 +41,8 @@ socket.on('userList', (users) => {
                 text = `${user.username}： <${user.celebrity.length}個字>`;
             } else {
                 text = `${user.username}： ${user.celebrity}`;
+                li.addEventListener('click', () => updateImageFrame(user.celebrity));
+                li.style.cursor = 'pointer';
             }
         } else {
             if (user.username === username) {
@@ -53,3 +55,10 @@ socket.on('userList', (users) => {
         userList.appendChild(li);
     });
 });
+
+function updateImageFrame(query) {
+    const encodedQuery = encodeURIComponent(query);
+    const url = `https://www.google.com/search?tbm=isch&q=${encodedQuery}&igu=1`;
+    imageFrame.src = url;
+    imageFrame.style.display = 'block';
+  }
