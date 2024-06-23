@@ -321,7 +321,7 @@ io.on('connection', (socket) => {
 
   // Handle username input
   socket.on('username', (username) => {
-    users[socket.id] = { username: username, celebrity: null };
+    users[socket.id] = { username: username, celebrity: null, isActive: true};
     io.to('gameRoom').emit('userList', Object.values(users)); // Update user list
   });
 
@@ -330,6 +330,14 @@ io.on('connection', (socket) => {
     // Assign random celebrities to users
     tmp_celebrities = [...celebrities];
     const shuffledCelebrities = shuffleArray(tmp_celebrities);
+    for (const userId in users) {
+      if (users.hasOwnProperty(userId)) {
+          let user = users[userId];
+          if (!user.isActive) {
+              delete users[userId];
+          }
+      }
+  }
     for (const userId in users) {
       if (users.hasOwnProperty(userId)) {
         users[userId].celebrity = shuffledCelebrities.pop();
@@ -343,8 +351,9 @@ io.on('connection', (socket) => {
   // Handle disconnect
   socket.on('disconnect', () => {
     console.log('A user disconnected');
-    delete users[socket.id];
-    // io.to('gameRoom').emit('userList', Object.values(users));
+    if (users.hasOwnProperty(socket.id)) {
+      users[socket.id].isActive = false;
+    }
   });
 });
 

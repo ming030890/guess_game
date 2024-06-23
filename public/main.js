@@ -36,11 +36,15 @@ socket.on('userList', (users) => {
     users.forEach(user => {
         const li = document.createElement('li');
         let text;
-        if (user.username === username) {
-            text = `${user.username} (You)`;
+        if (user.celebrity) {
+            if (user.username === username) {
+                text = `${user.username}： <${user.celebrity.length}個字>`;
+            } else {
+                text = `${user.username}： ${user.celebrity}`;
+            }
         } else {
-            if (user.celebrity) {
-                text = `${user.username}: ${user.celebrity}`;
+            if (user.username === username) {
+                text = `${user.username} (你)`;
             } else {
                 text = `${user.username}`;
             }
