@@ -58,7 +58,7 @@ socket.on('userList', (users) => {
 
 function updateImageFrame(query) {
     const encodedQuery = encodeURIComponent(query);
-    const url = `https://www.google.com/search?tbm=isch&q=${encodedQuery}&igu=1`;
+    const url = `https://www.bing.com/images/search?q=${encodedQuery}&first=1`;
     imageFrame.src = url;
     imageFrame.style.display = 'block';
   }

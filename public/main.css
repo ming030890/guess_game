@@ -79,3 +79,16 @@ li {
         margin-bottom: 10px;
     }
 }
+
+#imageFrame {
+    border: none;
+}
+
+#userList li {
+    transition: color 0.3s ease;
+}
+
+#userList li:hover {
+    color: #ff6b6b; /* Change this to any color you prefer */
+    cursor: pointer;
+}
