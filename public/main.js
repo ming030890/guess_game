@@ -17,13 +17,7 @@ if (localStorage.getItem('username')) {
 
 // Join button click handler
 joinButton.addEventListener('click', () => {
-    username = usernameInput.value;
-    if (username) {
-        localStorage.setItem('username', username);
-        socket.emit('username', username);
-        joinButton.disabled = true;
-        usernameInput.disabled = true;
-    }
+    emitUserName();
 });
 
 // Start game button click handler
@@ -62,3 +56,39 @@ function updateImageFrame(query) {
     imageFrame.src = url;
     imageFrame.style.display = 'block';
   }
+
+function getClientId() {
+    // Try to get the existing clientId from localStorage
+    let clientId = localStorage.getItem('clientId');
+
+    // If it doesn't exist, create a new one
+    if (!clientId) {
+        // Generate a new ID. This combines timestamp and random number for uniqueness
+        clientId = Date.now().toString(36) + Math.random().toString(36).substr(2);
+        
+        // Store it in localStorage for future use
+        localStorage.setItem('clientId', clientId);
+    }
+
+    return clientId;
+}
+
+function emitUserName() {
+    const username = usernameInput.value;
+    if (username) {
+        localStorage.setItem('username', username);
+        const clientId = getClientId();
+        socket.emit('username', {'username': username, 'clientId': clientId});
+        joinButton.disabled = true;
+        usernameInput.disabled = true;
+    }
+}
+
+socket.on('reconnect', () => {
+    username = usernameInput.value;
+    if (username) {
+        emitUserName();
+    }
+});
+
+  

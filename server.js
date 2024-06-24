@@ -320,9 +320,19 @@ io.on('connection', (socket) => {
   socket.join('gameRoom');
 
   // Handle username input
-  socket.on('username', (username) => {
-    users[socket.id] = { username: username, celebrity: null, isActive: true};
-    io.to('gameRoom').emit('userList', Object.values(users)); // Update user list
+  socket.on('username', (payload) => {
+    const username = payload.username;
+    const clientId = payload.clientId;
+
+    for (const userId in users) {
+      let user = users[userId];
+      if (user.clientId === clientId) {
+        delete users[userId];
+        break;
+      }
+    }
+    users[socket.id] = { username: username, celebrity: null, isActive: true, clientId : clientId};
+    io.to('gameRoom').emit('userList', Object.values(users));
   });
 
   // Handle start game event
@@ -331,11 +341,9 @@ io.on('connection', (socket) => {
     tmp_celebrities = [...celebrities];
     const shuffledCelebrities = shuffleArray(tmp_celebrities);
     for (const userId in users) {
-      if (users.hasOwnProperty(userId)) {
-          let user = users[userId];
-          if (!user.isActive) {
-              delete users[userId];
-          }
+      let user = users[userId];
+      if (!user.isActive) {
+          delete users[userId];
       }
   }
     for (const userId in users) {
