@@ -50,6 +50,12 @@ socket.on('userList', (users) => {
     });
 });
 
+socket.on('duplicated_username', () => {
+    alert("撞左名");
+    joinButton.disabled = false;
+    usernameInput.disabled = false;
+});
+
 function updateImageFrame(query) {
     const encodedQuery = encodeURIComponent(query);
     const url = `https://www.bing.com/images/search?q=${encodedQuery}&first=1`;
@@ -84,7 +90,7 @@ function emitUserName() {
     }
 }
 
-socket.on('reconnect', () => {
+socket.io.on('reconnect', () => {
     username = usernameInput.value;
     if (username) {
         emitUserName();

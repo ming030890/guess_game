@@ -331,6 +331,16 @@ io.on('connection', (socket) => {
         break;
       }
     }
+
+    for (const userId in users) {
+      let user = users[userId];
+      if (user.username === username) {
+        io.to('gameRoom').emit('userList', Object.values(users));
+        socket.emit("duplicated_username", true);
+        return;
+      }
+    }
+
     users[socket.id] = { username: username, celebrity: null, isActive: true, clientId : clientId};
     io.to('gameRoom').emit('userList', Object.values(users));
   });
