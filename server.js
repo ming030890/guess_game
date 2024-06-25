@@ -324,9 +324,11 @@ io.on('connection', (socket) => {
     const username = payload.username;
     const clientId = payload.clientId;
 
+    let oldUser = null;
     for (const userId in users) {
       let user = users[userId];
       if (user.clientId === clientId) {
+        oldUser = users[userId];
         delete users[userId];
         break;
       }
@@ -341,7 +343,13 @@ io.on('connection', (socket) => {
       }
     }
 
-    users[socket.id] = { username: username, celebrity: null, isActive: true, clientId : clientId};
+    if (oldUser !== null) {
+      users[socket.id] = oldUser;
+      users[socket.id].isActive = true;
+    } else {
+      users[socket.id] = { username: username, celebrity: null, isActive: true, clientId : clientId};
+    }
+    
     io.to('gameRoom').emit('userList', Object.values(users));
   });
 
